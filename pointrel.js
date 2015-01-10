@@ -1,3 +1,7 @@
+// Command line version of Pointrel system for Node.js
+// Just quick-and-dirty playful experiment for now
+// 2015-01-10 Paul D. Fernhout
+
 var command = process.argv[2];
 
 if (!command) {
