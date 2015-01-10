@@ -31,6 +31,8 @@ function displayHelp() {
   console.log("  findall a b c -- finds all matching triples, use _ for wildcard");
   console.log("  list [a [b]] -- lists matching strings with duplicates removes");
   console.log("  delete timestamp -- deletes a triple by renaming file with leading #");
+  console.log("  uuid -- generate random uuid");
+  console.log("  now -- current time in milliseconds");
   console.log("  help -- show this text");
 }
 
@@ -159,6 +161,29 @@ if (command === "list") {
   for (var resultKey in results) {
     console.log(resultKey);
   }
+  process.exit(0);
+}
+
+// generateUUID from: http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+function generateUUID(){
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+};
+
+if (command === "uuid") {
+  var uuid = generateUUID();
+  console.log(uuid);
+  process.exit(0);
+}
+
+if (command === "now") {
+  var currentTimeInMillseconds = new Date().getTime();
+  console.log(currentTimeInMillseconds);
   process.exit(0);
 }
 
