@@ -45,6 +45,8 @@ function strEndsWith(str, suffix) {
     return str.match(suffix + "$") == suffix;
 }
 
+var resources = {};
+
 function readData()  {
   var files = fs.readdirSync(resourcesDirectory);
   for (var i in files) {
@@ -55,8 +57,11 @@ function readData()  {
     var fullFileName = resourcesDirectory + '/' + shortFileName;
     var data = JSON.parse(fs.readFileSync(fullFileName, 'utf8'));
     console.log("read:", fullFileName, data);
+    resources[shortFileName.substring(9).substring(0, shortFileName.length - 14)] = data;
   }
 }
+
+// Issue with believing timestamps vs. modifying/reactingTo thing as-it-is (especially clock is wrong sometime).
 
 if (command === "find") {
   if (args.length !== 3) {
@@ -64,5 +69,22 @@ if (command === "find") {
     process.exit(-1);
   }
   readData();
+  var results = [];
+  for (var key in resources) {
+    var data = resources[key];
+    if (args[0] === "_" || data.a === args[0]) {
+      if (args[1] === "_" || data.b === args[1]) {
+         if (args[2] === "_" || data.c === args[2]) {
+           // Match
+           var result = [key]
+           if (args[0] === "_") result.push(data.a);
+           if (args[1] === "_") result.push(data.b);
+           if (args[2] === "_") result.push(data.c);
+           results.push(result);
+         }
+       }
+    }
+  }
+  console.log("results:", results);
 }
 
