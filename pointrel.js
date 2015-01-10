@@ -102,7 +102,7 @@ function readData()  {
 
 if (command === "find" || command === "findall") {
   if (args.length !== 3) {
-    console.log("find command needs three args");
+    console.log(command + " command needs three args");
     process.exit(-1);
   }
   readData();
