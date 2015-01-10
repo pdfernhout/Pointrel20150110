@@ -1,6 +1,7 @@
 // Command line version of Pointrel system for Node.js
 // Just quick-and-dirty playful experiment for now
 // 2015-01-10 Paul D. Fernhout
+// MIT License
 
 var command = process.argv[2];
 
@@ -16,4 +17,11 @@ process.argv.forEach(function (val, index, array) {
 });
 
 console.log("Pointrel command:", command, "args:", args);
+
+if (command === "add") {
+  if (args.length !== 3) {
+    console.log("add command needs three args");
+    process.exit(-1);
+  } 
+}
 
