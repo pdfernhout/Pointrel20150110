@@ -5,13 +5,13 @@
 
 "use strict";
 
-var resourcesDirectory = "resources";
+var resourcesDirectory = __dirname + "/resources";
 
 var command = process.argv[2];
 
 if (!command) {
   console.log("Pointrel usage: command args...");
-  process.exit(code=0);
+  process.exit(0);
 }
 
 var args = [];
@@ -92,6 +92,34 @@ if (command === "find" || command === "findall") {
       var lastResult = results[results.length - 1]
       console.log(lastResult[lastResult.length - 1]);
     }
+  }
+}
+
+if (command === "list") {
+  if (args.length > 2) {
+    console.log("list command needs zero, one, or two args");
+    process.exit(-1);
+  }
+  readData();
+  var results = {};
+  if (args.length === 0) {
+    for (var key in resources) {
+      var data = resources[key];
+      results[data.a] = true;
+    }
+  } else if (args.length === 1) {
+    for (var key in resources) {
+      var data = resources[key];
+      if (data.a === args[0]) results[data.b] = true;
+    }
+  } else {
+    for (var key in resources) {
+      var data = resources[key];
+      if ((data.a === args[0]) && (data.b === args[1])) results[data.c] = true;
+    }
+  }
+  for (var resultKey in results) {
+    console.log(resultKey);
   }
 }
 
