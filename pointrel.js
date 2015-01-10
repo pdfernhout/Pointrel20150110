@@ -102,28 +102,33 @@ function readData()  {
 
 // Issue with believing timestamps vs. modifying/reactingTo thing as-it-is (especially clock is wrong sometime).
 
+function find(a, b, c) {
+  var results = [];
+  for (var key in resources) {
+    var data = resources[key];
+    if (a === "_" || data.a === a) {
+      if (b === "_" || data.b === b) {
+         if (c === "_" || data.c === c) {
+           // Match
+           var result = [key]
+           if (a === "_") result.push(data.a);
+           if (b === "_") result.push(data.b);
+           if (c === "_") result.push(data.c);
+           results.push(result);
+         }
+       }
+    }
+  }
+  return results;
+}
+
 if (command === "find" || command === "findall") {
   if (args.length !== 3) {
     console.log(command + " command needs three args");
     process.exit(-1);
   }
   readData();
-  var results = [];
-  for (var key in resources) {
-    var data = resources[key];
-    if (args[0] === "_" || data.a === args[0]) {
-      if (args[1] === "_" || data.b === args[1]) {
-         if (args[2] === "_" || data.c === args[2]) {
-           // Match
-           var result = [key]
-           if (args[0] === "_") result.push(data.a);
-           if (args[1] === "_") result.push(data.b);
-           if (args[2] === "_") result.push(data.c);
-           results.push(result);
-         }
-       }
-    }
-  }
+  var results = find(args[0], args[1], args[2]);
   if (command === "findall") {
     console.log(results);
   } else {
