@@ -26,7 +26,7 @@ var fs = require('fs');
 
 if (command === "add") {
   if (args.length !== 3) {
-    console.log("add command needs three args");
+    console.log("add command needs three args of a b c");
     process.exit(-1);
   }
   var currentTimeInMillseconds = new Date().getTime();
@@ -34,6 +34,28 @@ if (command === "add") {
   var fileName = "resources/pointrel_" + currentTimeInMillseconds + ".json";
   var output = JSON.stringify(contents, null, 2) + "\n";
   fs.writeFileSync(fileName, output);
+  process.exit(0);
+}
+
+if (command === "delete") {
+  if (args.length !== 1) {
+    console.log("delete command needs one arg of a timestamp");
+    process.exit(-1);
+  }
+  var timestamp = args[0];
+  // todo: better sanitizing of timestamp
+  if (isNaN(timestamp)) {
+    console.log("argument to delete is not a timestamp");
+    process.exit(-1);
+  }
+  var fileName = "resources/pointrel_" + timestamp + ".json";
+  if (!fs.existsSync(fileName)) {
+    console.log("resource file does not exist:", fileName);
+    process.exit(-1);
+  } else {
+    var ignoredFileName = "resources/#pointrel_" + timestamp + ".json";
+    fs.renameSync(fileName, ignoredFileName);
+  }
   process.exit(0);
 }
 
