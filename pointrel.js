@@ -24,6 +24,21 @@ process.argv.forEach(function (val, index, array) {
 
 var fs = require('fs');
 
+function displayHelp() {
+  console.log("Pointrel system for the command line");
+  console.log("  add a b c -- adds triple");
+  console.log("  find a b c -- finds last matching triple, use _ for wildcard");
+  console.log("  findall a b c -- finds all matching triples, use _ for wildcard");
+  console.log("  list [a [b]] -- lists matching strings with duplicates removes");
+  console.log("  delete timestamp -- deletes a triple by renaming file with leading #");
+  console.log("  help -- show this text");
+}
+
+if (command === "help") {
+  displayHelp();
+  process.exit(0);
+}
+
 if (command === "add") {
   if (args.length !== 3) {
     console.log("add command needs three args of a b c");
@@ -148,4 +163,4 @@ if (command === "list") {
 }
 
 console.log("Unknown command:", command);
-
+displayHelp();
