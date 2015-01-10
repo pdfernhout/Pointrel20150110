@@ -29,8 +29,8 @@ if (command === "add") {
     console.log("add command needs three args");
     process.exit(-1);
   }
-  var contents = {command: "add", a: args[0], b: args[1], c: args[2]};
-  var currentTimeInMillseconds = new Date().getTime()
+  var currentTimeInMillseconds = new Date().getTime();
+  var contents = {command: "add", timestamp: currentTimeInMillseconds, a: args[0], b: args[1], c: args[2]};
   var fileName = "resources/pointrel_" + currentTimeInMillseconds + ".json";
   var output = JSON.stringify(contents, null, 2) + "\n";
   fs.writeFileSync(fileName, output);
