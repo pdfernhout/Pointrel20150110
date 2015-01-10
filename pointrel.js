@@ -20,7 +20,7 @@ process.argv.forEach(function (val, index, array) {
   if (index > 2) args.push(val);
 });
 
-console.log("Pointrel command:", command, "args:", args);
+// console.log("Pointrel command:", command, "args:", args);
 
 var fs = require('fs');
 
@@ -56,14 +56,14 @@ function readData()  {
     if (!isResourceFile) continue;  
     var fullFileName = resourcesDirectory + '/' + shortFileName;
     var data = JSON.parse(fs.readFileSync(fullFileName, 'utf8'));
-    console.log("read:", fullFileName, data);
+    // console.log("read:", fullFileName, data);
     resources[shortFileName.substring(9).substring(0, shortFileName.length - 14)] = data;
   }
 }
 
 // Issue with believing timestamps vs. modifying/reactingTo thing as-it-is (especially clock is wrong sometime).
 
-if (command === "find") {
+if (command === "find" || command === "findall") {
   if (args.length !== 3) {
     console.log("find command needs three args");
     process.exit(-1);
@@ -85,6 +85,13 @@ if (command === "find") {
        }
     }
   }
-  console.log("results:", results);
+  if (command === "findall") {
+    console.log(results);
+  } else {
+    if (results.length) {
+      var lastResult = results[results.length - 1]
+      console.log(lastResult[lastResult.length - 1]);
+    }
+  }
 }
 
