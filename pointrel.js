@@ -3,6 +3,8 @@
 // 2015-01-10 Paul D. Fernhout
 // MIT License
 
+"use strict";
+
 var command = process.argv[2];
 
 if (!command) {
@@ -10,7 +12,7 @@ if (!command) {
   process.exit(code=0);
 }
 
-args = [];
+var args = [];
 
 process.argv.forEach(function (val, index, array) {
   if (index > 2) args.push(val);
@@ -26,7 +28,7 @@ if (command === "add") {
     process.exit(-1);
   }
   var contents = {command: "add", a: args[0], b: args[1], c: args[2]};
-  fileName = "out.txt";
+  var fileName = "out.txt";
   var output = JSON.stringify(contents, null, 2) + "\n";
   fs.writeFileSync(fileName, output);
   process.exit(0);
