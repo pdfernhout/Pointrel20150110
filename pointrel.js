@@ -93,6 +93,7 @@ if (command === "find" || command === "findall") {
       console.log(lastResult[lastResult.length - 1]);
     }
   }
+  process.exit(0);
 }
 
 if (command === "list") {
@@ -121,5 +122,8 @@ if (command === "list") {
   for (var resultKey in results) {
     console.log(resultKey);
   }
+  process.exit(0);
 }
+
+console.log("Unknown command:", command);
 
