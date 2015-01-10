@@ -124,11 +124,12 @@ function find(a, b, c) {
 }
 
 if (command === "find" || command === "findall") {
-  if (args.length !== 3) {
-    console.log(command + " command needs three args");
+  if (args.length !== 2 && args.length !== 3) {
+    console.log(command + " command needs two or three args");
     process.exit(-1);
   }
   readData();
+  if (args.length < 3) args.push("_");
   var results = find(args[0], args[1], args[2]);
   if (command === "findall") {
     console.log(results);
@@ -141,12 +142,7 @@ if (command === "find" || command === "findall") {
   process.exit(0);
 }
 
-if (command === "list") {
-  if (args.length > 2) {
-    console.log("list command needs zero, one, or two args");
-    process.exit(-1);
-  }
-  readData();
+function list(args) {
   var results = {};
   if (args.length === 0) {
     for (var key in resources) {
@@ -164,6 +160,16 @@ if (command === "list") {
       if ((data.a === args[0]) && (data.b === args[1])) results[data.c] = true;
     }
   }
+  return results;
+}
+
+if (command === "list") {
+  if (args.length > 2) {
+    console.log("list command needs zero, one, or two args");
+    process.exit(-1);
+  }
+  readData();
+  var results = list(args);
   for (var resultKey in results) {
     console.log(resultKey);
   }
