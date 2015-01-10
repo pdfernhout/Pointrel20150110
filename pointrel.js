@@ -32,7 +32,8 @@ function displayHelp() {
   console.log("  list [a [b]] -- lists matching strings with duplicates removes");
   console.log("  delete timestamp -- deletes a triple by renaming file with leading #");
   console.log("  uuid -- generate random uuid");
-  console.log("  now -- current time in milliseconds");
+  console.log("  now -- the time right now in milliseconds");
+  console.log("  current -- the result of 'pointrel find current value _'");
   console.log("  help -- show this text");
 }
 
@@ -133,7 +134,7 @@ if (command === "find" || command === "findall") {
     console.log(results);
   } else {
     if (results.length) {
-      var lastResult = results[results.length - 1]
+      var lastResult = results[results.length - 1];
       console.log(lastResult[lastResult.length - 1]);
     }
   }
@@ -189,6 +190,18 @@ if (command === "uuid") {
 if (command === "now") {
   var currentTimeInMillseconds = new Date().getTime();
   console.log(currentTimeInMillseconds);
+  process.exit(0);
+}
+
+if (command === "current") {
+  readData();
+  var results = find("current", "value", "_");
+  if (results.length === 0) {
+    console.log("undefined");
+    process.exit(-1);
+  }
+  var lastResult = results[results.length - 1];
+  console.log(lastResult[lastResult.length - 1]);
   process.exit(0);
 }
 
