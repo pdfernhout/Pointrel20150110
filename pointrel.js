@@ -18,10 +18,17 @@ process.argv.forEach(function (val, index, array) {
 
 console.log("Pointrel command:", command, "args:", args);
 
+var fs = require('fs');
+
 if (command === "add") {
   if (args.length !== 3) {
     console.log("add command needs three args");
     process.exit(-1);
-  } 
+  }
+  var contents = {command: "add", a: args[0], b: args[1], c: args[2]};
+  fileName = "out.txt";
+  var output = JSON.stringify(contents, null, 2) + "\n";
+  fs.writeFileSync(fileName, output);
+  process.exit(0);
 }
 
