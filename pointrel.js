@@ -233,6 +233,7 @@ function serverHandler(request, response) {
     // TODO: improve; should not be reading all the data with every page request, even with ten second delay
     var now = new Date().getTime();
     if (lastReadTime_ms < now - refreshDelay_ms) {
+      console.log("Reading data");
       readData();
       lastReadTime_ms = now;
     }
