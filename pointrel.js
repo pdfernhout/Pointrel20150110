@@ -289,7 +289,18 @@ function serverHandler(request, response) {
       });
       request.on('end', function() {
         var formData = qs.parse(requestBody);
-        var content = last(formData.a, formData.b);
+        var content;
+        if (!formData.a || !formData.b) {
+          content = "";
+          var search = [];
+          if (formData.a) search.push(formData.a);
+          var results = list(search);
+          for (var resultKey in results) {
+              content += resultKey + "\n";
+          }
+        }  else {
+           content = last(formData.a, formData.b);
+        }
         response.writeHead(200, {'Content-Type': 'text/plain'});
         response.end(content);
       });
