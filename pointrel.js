@@ -34,6 +34,7 @@ function displayHelp() {
   console.log("  uuid -- generate random uuid");
   console.log("  now -- the time right now in milliseconds");
   console.log("  current -- the result of 'pointrel find current value _'");
+  console.log("  server -- web server displaying pages using 'pointrel find webpages $name _'");
   console.log("  help -- show this text");
 }
 
@@ -211,5 +212,40 @@ if (command === "current") {
   process.exit(0);
 }
 
-console.log("Unknown command:", command);
-displayHelp();
+function server() {
+  var lastReadTime_ms = new Date().getTime() - 10000;
+  var http = require('http');
+  var server = http.createServer(function (request, response) {
+    var contentType = "text/plain";
+    var url = request.url
+    var content = "URL not found:" + url;
+    // var content = "Hello World\n" + "Requested: " + request.url;
+    // TODO: improve; should not be reading all the data with every page request, even with ten second delay
+    var now = new Date().getTime();
+    if (lastReadTime_ms < now - 10000) {
+      readData();
+      lastReadTime_ms = now;
+    }
+    if (url === "/") url = "/index.html";
+    var results = find("webpages", url.substring(1), "_");
+    if (results.length) {
+      var lastResult = results[results.length - 1];
+      content = lastResult[lastResult.length - 1];
+    } else {
+      content = "URL not found: " + url;
+    }
+    // var content = "Hello World\n" + "Requested: " + url;
+    response.writeHead(200, {"Content-Type": contentType});
+    response.end(content);
+  });
+  server.listen(8000);
+  console.log("server on http://localhost:8000");
+}
+
+if (command === "server") {
+  readData();
+  server();
+} else {
+  console.log("Unknown command:", command);
+  displayHelp();
+}
