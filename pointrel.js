@@ -93,6 +93,7 @@ function strEndsWith(str, suffix) {
 
 var resources = {};
 
+// TODO: For server, remember latest timestamp read and does not reread older ones when rescanning
 function readData()  {
   var files = fs.readdirSync(resourcesDirectory);
   for (var i in files) {
