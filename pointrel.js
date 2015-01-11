@@ -212,29 +212,40 @@ if (command === "current") {
   process.exit(0);
 }
 
+function last(a, b) {
+    var results = find(a, b, "_");
+    if (results.length) {
+      var lastResult = results[results.length - 1];
+      return lastResult[lastResult.length - 1];
+    } else {
+      return null;
+    }
+}
+
+var refreshDelay_ms = 1000;
+
 function server() {
-  var lastReadTime_ms = new Date().getTime() - 10000;
+  var lastReadTime_ms = new Date().getTime() - refreshDelay_ms;
   var http = require('http');
   var server = http.createServer(function (request, response) {
     var contentType = "text/plain";
-    var url = request.url
-    var content = "URL not found:" + url;
-    // var content = "Hello World\n" + "Requested: " + request.url;
+    var url = request.url;
+    console.log("Requesting:", url);
     // TODO: improve; should not be reading all the data with every page request, even with ten second delay
     var now = new Date().getTime();
-    if (lastReadTime_ms < now - 10000) {
+    if (lastReadTime_ms < now - refreshDelay_ms) {
       readData();
       lastReadTime_ms = now;
     }
     if (url === "/") url = "/index.html";
-    var results = find("webpages", url.substring(1), "_");
-    if (results.length) {
-      var lastResult = results[results.length - 1];
-      content = lastResult[lastResult.length - 1];
-    } else {
+    var pageID = "page:" + url.substring(1);
+    var content = last(pageID, "content");
+    if (content === null) {
       content = "URL not found: " + url;
+    } else {
+       var specificContentType = last(pageID, "contentType");
+       if (specificContentType) contentType = specificContentType;
     }
-    // var content = "Hello World\n" + "Requested: " + url;
     response.writeHead(200, {"Content-Type": contentType});
     response.end(content);
   });
