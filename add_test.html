@@ -2,9 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Demo: dojo/request/xhr.post</title>
-    <!-- <link rel="stylesheet" href="style.css" media="screen">
-    <link rel="stylesheet" href="../../../resources/style/demo.css" media="screen"> -->
+    <title>Demo: Pointrel system add test</title>
     <style>
       label {
         display: inline-block;
@@ -18,20 +16,23 @@
     <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.9/dojo/dojo.js"></script>
   </head>
   <body>
+    <h2 id="javascriptWarning">Please enable JavaScript to use this form</h2>
     <h1>Demo: Pointrel system add test</h1>
     <p>Use of xhr.post from Dojo toolkit to send a b c fields to Pointrel system.</p>
-    <div id="resultDiv">
-      <div><label>Server Message:</label><span id="svrMessage"></span></div>
-    </div>
     <form id="formNode">
       <div><label>a: </label><input type="text" name="a" /></div>
       <div><label>b: </label><input type="text" name="b" /></div>
-      <div><label>c: </label><input type="text" name="c" /></div>
+      <div><label>c: </label><textarea name="c" form="formNode"></textarea></div>
       <button type="submit">Add</button>
     </form>
+    <div id="resultDiv">
+      <div><label>Server Message:</label><span id="svrMessage"></span></div>
+    </div>
     <script>
       require(["dojo/dom", "dojo/on", "dojo/request", "dojo/dom-form"],
         function(dom, on, request, domForm) {
+          var javascriptWarning = dom.byId('javascriptWarning');
+          javascriptWarning.style.display = 'none';
 
           var form = dom.byId('formNode');
 
