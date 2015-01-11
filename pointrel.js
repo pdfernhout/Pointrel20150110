@@ -43,16 +43,21 @@ if (command === "help") {
   process.exit(0);
 }
 
+function add(a, b, c) {
+  var currentTimeInMillseconds = new Date().getTime();
+  var contents = {command: "add", timestamp: currentTimeInMillseconds, a: a, b: b, c: c};
+  var fileName = "resources/pointrel_" + currentTimeInMillseconds + ".json";
+  var output = JSON.stringify(contents, null, 2) + "\n";
+  fs.writeFileSync(fileName, output);
+  return currentTimeInMillseconds;
+}
+
 if (command === "add") {
   if (args.length !== 3) {
     console.log("add command needs three args of a b c");
     process.exit(-1);
   }
-  var currentTimeInMillseconds = new Date().getTime();
-  var contents = {command: "add", timestamp: currentTimeInMillseconds, a: args[0], b: args[1], c: args[2]};
-  var fileName = "resources/pointrel_" + currentTimeInMillseconds + ".json";
-  var output = JSON.stringify(contents, null, 2) + "\n";
-  fs.writeFileSync(fileName, output);
+  add(args[0], args[1], args[2]);
   process.exit(0);
 }
 
@@ -263,9 +268,11 @@ function serverHandler(request, response) {
         // TODO: Eventually move require to top of file
         var qs = require('querystring');
         var formData = qs.parse(requestBody);
+        var id = add(formData.a, formData.b, formData.c);
         response.writeHead(200, {'Content-Type': 'text/html'});
         response.write('<!doctype html><html><head><title>response</title></head><body>');
-        response.write('Thanks for the data!<br />a ' + formData.a);
+        response.write('Thanks for the data!<br />:id ' + id);
+        response.write('<br />a: ' + formData.a);
         response.write('<br />b: ' + formData.b);
         response.write('<br />c: ' + formData.c);
         response.end('</body></html>');
