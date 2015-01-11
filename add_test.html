@@ -22,9 +22,10 @@
     <form id="formNode">
       <div><label>a: </label><input type="text" name="a" /></div>
       <div><label>b: </label><input type="text" name="b" /></div>
-      <div><label>c: </label><textarea name="c" form="formNode"></textarea></div>
+      <div><label>c: </label><textarea name="c" form="formNode" id="c"></textarea></div>
       <button type="submit">Add</button>
     </form>
+    <button id="findLastCButton"">Find last C</button>
     <div id="resultDiv">
       <div><label>Server Message:</label><span id="svrMessage"></span></div>
     </div>
@@ -35,6 +36,7 @@
           javascriptWarning.style.display = 'none';
 
           var form = dom.byId('formNode');
+          var findLastCButton = dom.byId('findLastCButton');
 
           // Attach the onsubmit event handler of the form
           on(form, "submit", function(evt) {
@@ -53,6 +55,19 @@
               dom.byId('svrMessage').innerHTML = response;
             });
           });
+
+          on(findLastCButton, 'click', function(evt) {
+            console.log('findLastCButton');
+            // Post the data to the server
+            request.post("/findLastC", {
+              // Send the fields
+              data: domForm.toObject("formNode"),
+              // Wait 2 seconds for a response
+              timeout: 2000
+            }).then(function(response) {
+              dom.byId('c').value = response;
+            });
+    	  });
         }
       );
     </script>

@@ -255,6 +255,8 @@ function serverHandler(request, response) {
     response.writeHead(200, {"Content-Type": contentType});
     response.end(content);
   } else if (request.method === "POST") {
+    // TODO: Eventually move require to top of file
+    var qs = require('querystring');
     if (request.url === "/add") {
       var requestBody = '';
       request.on('data', function(data) {
@@ -266,8 +268,6 @@ function serverHandler(request, response) {
       });
       request.on('end', function() {
         // TODO: Sanitize inputs?
-        // TODO: Eventually move require to top of file
-        var qs = require('querystring');
         var formData = qs.parse(requestBody);
         var id = add(formData.a, formData.b, formData.c);
         response.writeHead(200, {'Content-Type': 'text/html'});
@@ -277,6 +277,21 @@ function serverHandler(request, response) {
         response.write('<br />b: ' + formData.b);
         response.write('<br />c: ' + formData.c);
         response.end('</body></html>');
+      });
+    } else if (request.url === "/findLastC") {
+      var requestBody = '';
+      request.on('data', function(data) {
+        requestBody += data;
+        if (requestBody.length > 1e7) {
+          response.writeHead(413, 'Request Entity Too Large', {'Content-Type': 'text/html'});
+          response.end('<!doctype html><html><head><title>413</title></head><body>413: Request Entity Too Large</body></html>');
+        }
+      });
+      request.on('end', function() {
+        var formData = qs.parse(requestBody);
+        var content = last(formData.a, formData.b);
+        response.writeHead(200, {'Content-Type': 'text/plain'});
+        response.end(content);
       });
     } else {
       response.writeHead(404, 'Resource Not Found', {'Content-Type': 'text/html'});
