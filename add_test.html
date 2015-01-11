@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Demo: dojo/request/xhr.post</title>
+    <!-- <link rel="stylesheet" href="style.css" media="screen">
+    <link rel="stylesheet" href="../../../resources/style/demo.css" media="screen"> -->
+    <style>
+      label {
+        display: inline-block;
+        width: 115px;
+      }
+      #resultDiv div, #formNode div {
+        margin-bottom: 5px;
+      }
+    </style>
+    <!-- load dojo and provide config via data attribute -->
+    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.9/dojo/dojo.js"></script>
+  </head>
+  <body>
+    <h1>Demo: Pointrel system add test</h1>
+    <p>Use of xhr.post from Dojo toolkit to send a b c fields to Pointrel system.</p>
+    <div id="resultDiv">
+      <div><label>Server Message:</label><span id="svrMessage"></span></div>
+    </div>
+    <form id="formNode">
+      <div><label>a: </label><input type="text" name="a" /></div>
+      <div><label>b: </label><input type="text" name="b" /></div>
+      <div><label>c: </label><input type="text" name="c" /></div>
+      <button type="submit">Add</button>
+    </form>
+    <script>
+      require(["dojo/dom", "dojo/on", "dojo/request", "dojo/dom-form"],
+        function(dom, on, request, domForm) {
+
+          var form = dom.byId('formNode');
+
+          // Attach the onsubmit event handler of the form
+          on(form, "submit", function(evt) {
+
+            // prevent the page from navigating after submit
+            evt.stopPropagation();
+            evt.preventDefault();
+
+            // Post the data to the server
+            request.post("/add", {
+              // Send the fields
+              data: domForm.toObject("formNode"),
+              // Wait 2 seconds for a response
+              timeout: 2000
+            }).then(function(response){
+              dom.byId('svrMessage').innerHTML = response;
+            });
+          });
+        }
+      );
+    </script>
+  </body>
+</html>
