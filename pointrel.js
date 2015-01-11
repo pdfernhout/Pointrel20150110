@@ -223,11 +223,10 @@ function last(a, b) {
 }
 
 var refreshDelay_ms = 1000;
+var lastReadTime_ms = new Date().getTime() - refreshDelay_ms;
 
-function server() {
-  var lastReadTime_ms = new Date().getTime() - refreshDelay_ms;
-  var http = require('http');
-  var server = http.createServer(function (request, response) {
+function serverHandler(request, response) {
+  if (request.method === "GET") {
     var contentType = "text/plain";
     var url = request.url;
     console.log("Requesting:", url);
@@ -248,7 +247,42 @@ function server() {
     }
     response.writeHead(200, {"Content-Type": contentType});
     response.end(content);
-  });
+  } else if (request.method === "POST") {
+    if (request.url === "/add") {
+      var requestBody = '';
+      request.on('data', function(data) {
+        requestBody += data;
+        if (requestBody.length > 1e7) {
+          response.writeHead(413, 'Request Entity Too Large', {'Content-Type': 'text/html'});
+          response.end('<!doctype html><html><head><title>413</title></head><body>413: Request Entity Too Large</body></html>');
+        }
+      });
+      request.on('end', function() {
+        // TODO: Sanitize inputs?
+        // TODO: Eventually move require to top of file
+        var qs = require('querystring');
+        var formData = qs.parse(requestBody);
+        response.writeHead(200, {'Content-Type': 'text/html'});
+        response.write('<!doctype html><html><head><title>response</title></head><body>');
+        response.write('Thanks for the data!<br />a ' + formData.a);
+        response.write('<br />b: ' + formData.b);
+        response.write('<br />c: ' + formData.c);
+        response.end('</body></html>');
+      });
+    } else {
+      response.writeHead(404, 'Resource Not Found', {'Content-Type': 'text/html'});
+      response.end('<!doctype html><html><head><title>404</title></head><body>404: Resource Not Found</body></html>');
+    }
+  } else {
+  response.writeHead(405, 'Method Not Supported', {'Content-Type': 'text/html'});
+  return response.end('<!doctype html><html><head><title>405</title></head><body>405: Method Not Supported</body></html>');
+  }
+}
+
+function server() {
+  // TODO: Eventually move require to top of file
+  var http = require('http');
+  var server = http.createServer(serverHandler);
   server.listen(8000);
   console.log("server on http://localhost:8000");
 }
