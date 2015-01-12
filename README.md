@@ -1,4 +1,4 @@
-Pointrel20150110 by Paul Fernhout, MIT license
+# Pointrel20150110 by Paul Fernhout, MIT license
 
 The intent of this version of the Pointrel system was to have a quick-and-dirty experimental command line version of a triple store inspired by the MH (mail handling) concept, where you could use standard shell operations alongside command to create and find Pointrel triples. I made an initial version in Node.js. So, with the proper aliasing, you could issue shell commands like: "$ pointrel add a b c".
 
@@ -6,7 +6,7 @@ I rapidly realized it would be nice to also have a server version so you access 
 
 Then I added a test file to add triples from the browser, which interacted with extra server functions to add a triple or to list things.
 
-# Useful things to know for command line use:
+## Useful things to know for command line use:
 
 For bash on Mac to get an alias for a "pointrel" command (replace $YOUR_USERID$ with your user ID):
 
@@ -38,7 +38,7 @@ You can delete previously added relationships if you know their timestamp ID (fr
 
   $ pointrel delete $SOME_TIMESTAMP_ID$
 
-# Useful things to know for web server use:
+## Useful things to know for web server use:
 
 To get the webserver running in the background to use the pages:
 
@@ -61,7 +61,7 @@ As an example, to add the content for a bootstrap page running as "http://localh
 
 That bootstrap file supports defining new triples, so you can define new pages or even upgrade the bootstrap page itself. You can add web content files with any extension or none at all, but you need to set the content type appropriately for non-text files. You can specify arbitrary paths with slashes in them. You can add JavaScript files to make complex apps (but you should set the contentType for them). You can store data back to the server as a new triple using a POST command from JavaScript (see add_test.html for an example). There may be a short delay (currently up to one second) before the webserver picks up changes.
 
-# Screenshots from updating the README.txt file (before if became README.md to include the screenshots):
+## Screenshots from updating the README.txt file (before if became README.md to include the screenshots):
 
 ![Pointrel20150110-screenshot-adding-README-content-via-web-interface.png](/screenshots/Pointrel20150110-screenshot-adding-README-content-via-web-interface.png?raw=true "Optional Title")
 
