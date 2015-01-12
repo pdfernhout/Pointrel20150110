@@ -1,6 +1,6 @@
-Pointrel20150110 by Paul Fernhout
+Pointrel20150110 by Paul Fernhout, MIT license
 
-The intent of this version of the Pointrel system was to have a quick-and-dirty experimental command line version inspired by the MH (mail handling) concept, where you could use standard shell operations alongside Pointrel triples. I made an initial version in Node.js. So you could issue commands like (with the proper aliases) "pointrel add a b c").
+The intent of this version of the Pointrel system was to have a quick-and-dirty experimental command line version of a triple store inspired by the MH (mail handling) concept, where you could use standard shell operations alongside command to create and find Pointrel triples. I made an initial version in Node.js. So, with the proper aliasing, you could issue shell commands like: "$ pointrel add a b c".
 
 I rapidly realized it would be nice to also have a server version so you access the content via a web browser. So, I added that also using Node.js to the same JavaScript file (adding a "pointrel server" command). 
 
@@ -8,7 +8,7 @@ Then I added a test file to add triples from the browser, which interacted with 
 
 ==== Useful things to know for command line use:
 
-For bash on Mac (replace $YOUR_USERID$ with your user ID):
+For bash on Mac to get an alias for a "pointrel" command (replace $YOUR_USERID$ with your user ID):
 
   alias pointrel="node /Users/$YOUR_USERID$/pointrel_command/pointrel.js"
 
