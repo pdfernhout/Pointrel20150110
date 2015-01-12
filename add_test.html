@@ -30,6 +30,11 @@
       <div><label>Server Message:</label><span id="svrMessage"></span></div>
     </div>
     <script>
+      function escapeHtml(str) {
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
+      }; 
       require(["dojo/dom", "dojo/on", "dojo/request", "dojo/dom-form"],
         function(dom, on, request, domForm) {
           var javascriptWarning = dom.byId('javascriptWarning');
@@ -52,7 +57,11 @@
               // Wait 2 seconds for a response
               timeout: 2000
             }).then(function(response){
-              dom.byId('svrMessage').innerHTML = response;
+              var truncatedResponse = response;
+              if (response.length > 256) {
+                truncatedResponse = response.substring(0,256) + "...";
+              }
+              dom.byId('svrMessage').innerHTML = escapeHtml(truncatedResponse);
             });
           });
 

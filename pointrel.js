@@ -253,6 +253,7 @@ function serverHandler(request, response) {
        if (specificContentType) contentType = specificContentType;
     }
     response.writeHead(200, {"Content-Type": contentType});
+    content = "" + content;
     response.end(content);
   } else if (request.method === "POST") {
     // TODO: Eventually move require to top of file
@@ -299,7 +300,7 @@ function serverHandler(request, response) {
               content += resultKey + "\n";
           }
         }  else {
-           content = last(formData.a, formData.b);
+           content = "" + last(formData.a, formData.b);
         }
         response.writeHead(200, {'Content-Type': 'text/plain'});
         response.end(content);
