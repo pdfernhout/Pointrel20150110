@@ -38,6 +38,10 @@ You can delete previously added relationships if you know their timestamp ID (fr
 
     $ pointrel delete $SOME_TIMESTAMP_ID$
 
+## Screenshot of using Pointrel command line to add a "thought"
+
+![Pointrel20150110 screenshot of command line interactions to add a thought](/screenshots/Pointrel20150110-screenshot-command-line-interactions-to-add-a-thought.png?raw=true "Optional Title")
+
 ## Useful things to know for web server use:
 
 To get the webserver running in the background to use the pages:
@@ -63,7 +67,7 @@ That bootstrap file supports defining new triples, so you can define new pages o
 
 ## Screenshots from updating the README.txt file (before if became README.md to include the screenshots):
 
-![Pointrel20150110-screenshot-adding-README-content-via-web-interface.png](/screenshots/Pointrel20150110-screenshot-adding-README-content-via-web-interface.png?raw=true "Optional Title")
+![Pointrel20150110 screenshot adding README content via web interface](/screenshots/Pointrel20150110-screenshot-adding-README-content-via-web-interface.png?raw=true "Optional Title")
 
-![Pointrel20150110-screenshot-viewing-README-content-via-web-interface.png](/screenshots/Pointrel20150110-screenshot-viewing-README-content-via-web-interface.png?raw=true "Optional Title")
+![Pointrel20150110 screenshot viewing README content via web interface](/screenshots/Pointrel20150110-screenshot-viewing-README-content-via-web-interface.png?raw=true "Optional Title")
 
