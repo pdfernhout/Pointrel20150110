@@ -1,0 +1,38 @@
+2015-01-12 Pointrel system design notes by Paul Fernhout
+
+Thinking about performance impact of reading all files when server starts up.
+And also storing their contents in memory.
+This is done both in Pointrel20150110 (the latest, using to edit this) and Pointrel20141201 (used in NarraKit).
+
+Would be more computationally efficient in that sense if only read some files.
+Much data is of no current interest, like parts of an audio stream you are not going to listen to that day.
+So processing that entire stream (especially in JSON) as startup and storing it in memory is wasteful.
+It does provide a conceptual simplicity to the design though, with the consistent "enveloped" idea.
+So there is an implementation benefit in that sense.
+
+There is another cost, which is that the envelopes with timestamps are fairly unique.
+They will wrap data which might otherwise be de-duplicated if it was referenced directly by its SHA256.
+
+I have thought long (often during walks in nature) about this issue.
+How do you indicate to the system that something should be indexed, and how it should be indexed?
+
+Possibilities include:
+* You specify a content type when you save the data, which is stored separately.
+* You specify an object class when you save the data (maybe in addition to content type), which is stored separately
+* You specify an extension when you save the data (maybe including object class, like ".org.pointrel.pointrel20150110.PointrelChatMessage.json"), which is stored in the file name and needs to be supplied to retrieve the data.
+* You add type or other information into the URL produced for the resource, but ignore it when retrieving based only on the SHA part, but you somehow retain or use initial value specified in indexing?
+* You set a flag on storing the data, and the flag gets saved separately, like maybe in the stored file name (although that may make it hard to find the resource just from its SHA256 -- but could try both variants).
+* You inspect the contents of the file, looking for marker bytes at the start, which could include an open brace for JSON, and maybe an initial "__type" field if JSON; maybe only some specific files get indexed
+* The content is always wrapped in a standard way (like JSON) with type data and other data included in a standard way (the envelope approach).
+
+For inspection, it would reduce the amount of file reading if there was a way to know from the storage file name that the file could be indeed in a certain way (like the extension, or another character at the start of the name). But would that break the "SHA256" lookup ideal? Maybe it is OK to include the type in the resource reference? But then run into issue with sanitizing the type information if used in a file name and limiting the length -- at least if the implementation uses files. You can MD5 the class though to get a sanitized string for file names, but then you lose useful information when looking at file names.
+
+You could have separate un-indexed resource files referred to from indexed resources. The indexed files would be like envelopes or more complex multi-resource things like a list of all segments of an audio file.
+
+A downside to that approach is that resource files are not so "atomic" where you have all the information in one file. It makes them less transactional. That also makes them harder to understand if you are looking at the contents. Context about the type of information is lost, given that files don't generally include type information in them (although, ideally, they should, so that is a sort of fault of the design of files).
+
+It also puts more of a burden on the system regarding transactions, where you might store a resource but then fail to store its envelope. Then the unindexed data is in a sense "lost" -- assuming another envelope is not made which refers to it, like if you try to restore the same audio information. But maybe that is OK in practice?
+
+Also, in thinking about the file model of data storage, a decision made for files is to keep the human readable file name information separate from the inode representing the file. That file name info is in the directory structures. There may be some value in that as far as implementation, especially for a dynamic system. But in a more static, and append-only, system, it seems that labelling things as they are created makes a lot of sense. Still, you may want to change the label later...
+
+In general, as a design principle, I think I want a very flexible system, but then specific conventions on how to use it that reduce much of the flexibility? But still leaving an openness for frther experimenting and change to future needs? So, like for triple fields, there coudl be a convention that a leading strign with a colon signifies a namespace, like "standard:content"? Maybe with a default of "standard" or "pointrel" or "Default" or "Dublin core" or something else if none is specified?
