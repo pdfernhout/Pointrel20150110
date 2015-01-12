@@ -231,18 +231,22 @@ function last(a, b) {
 var refreshDelay_ms = 1000;
 var lastReadTime_ms = new Date().getTime() - refreshDelay_ms;
 
+function updateDataIfStale() {
+  var now = new Date().getTime();
+  if (lastReadTime_ms < now - refreshDelay_ms) {
+    console.log("Reading data");
+    readData();
+    lastReadTime_ms = now;
+  }
+}
+
 function serverHandler(request, response) {
   if (request.method === "GET") {
     var contentType = "text/plain";
     var url = request.url;
     console.log("Requesting:", url);
     // TODO: improve; should not be reading all the data with every page request, even with ten second delay
-    var now = new Date().getTime();
-    if (lastReadTime_ms < now - refreshDelay_ms) {
-      console.log("Reading data");
-      readData();
-      lastReadTime_ms = now;
-    }
+    updateDataIfStale();
     if (url === "/") url = "/index.html";
     var pageID = "page:" + url.substring(1);
     var content = last(pageID, "content");
@@ -291,6 +295,7 @@ function serverHandler(request, response) {
       });
       request.on('end', function() {
         var formData = qs.parse(requestBody);
+        updateDataIfStale();
         var content;
         if (!formData.a || !formData.b) {
           content = "";
