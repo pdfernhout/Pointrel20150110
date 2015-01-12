@@ -247,14 +247,15 @@ function serverHandler(request, response) {
     var pageID = "page:" + url.substring(1);
     var content = last(pageID, "content");
     if (content === null) {
-      content = "URL not found: " + url;
+      response.writeHead(404, 'Resource Not Found', {'Content-Type': 'text/plain'});
+      response.end("URL not found: " + url);
     } else {
-       var specificContentType = last(pageID, "contentType");
-       if (specificContentType) contentType = specificContentType;
+      var specificContentType = last(pageID, "contentType");
+      if (specificContentType) contentType = specificContentType;
+      response.writeHead(200, {"Content-Type": contentType});
+      content = "" + content;
+      response.end(content);
     }
-    response.writeHead(200, {"Content-Type": contentType});
-    content = "" + content;
-    response.end(content);
   } else if (request.method === "POST") {
     // TODO: Eventually move require to top of file
     var qs = require('querystring');
