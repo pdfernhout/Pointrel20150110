@@ -34,7 +34,8 @@ function displayHelp() {
   console.log("  uuid -- generate random uuid");
   console.log("  now -- the time right now in milliseconds");
   console.log("  current -- the result of 'pointrel find current value _'");
-  console.log("  server -- web server displaying pages using 'pointrel find webpages $name _'");
+  console.log("  server -- web server displaying pages using 'pointrel findpage:$NAME content _'");
+  console.log("      set the web page content-type using page:$NAME content-type $TYPE");
   console.log("  help -- show this text");
 }
 
@@ -254,8 +255,9 @@ function serverHandler(request, response) {
       response.writeHead(404, 'Resource Not Found', {'Content-Type': 'text/plain'});
       response.end("URL not found: " + url);
     } else {
-      var specificContentType = last(pageID, "contentType");
+      var specificContentType = last(pageID, "content-type");
       if (specificContentType) contentType = specificContentType;
+      console.log("content-type: '" + specificContentType + "'");  
       response.writeHead(200, {"Content-Type": contentType});
       content = "" + content;
       response.end(content);
