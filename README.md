@@ -10,9 +10,10 @@ License: MIT license
 
 ### Useful things to know for command line use:
 
-For bash on Mac to get an alias for a "pointrel" command (replace $YOUR_USERID$ with your user ID):
+For a shorthand command in bash to use "p" instead of "pointrel", add this to a "p" file in ~/bin and make it executable (adjust for where you copied Pointrel20150110 or where node is installed):
 
-    alias pointrel="node /Users/$YOUR_USERID$/pointrel_command/pointrel.js"
+    #!/bin/bash
+    /usr/bin/node ~/Pointrel20150110/pointrel.js "$@"
 
 You can list the first item of all triples with:
 
@@ -20,25 +21,25 @@ You can list the first item of all triples with:
 
 You can list the second (b, or relationship) part of triples for a first (a) part with:
 
-    $ pointrel list $THE_ITEM$
+    $ pointrel list $ITEM
 
 You can list all the third (c, or value) part of triples for the a and b parts with:
 
-    $ pointrel list $THE_ITEM$ $THE_RELATIONSHIP$
+    $ pointrel list $ITEM $RELATIONSHIP
 
-You can also "find" the last value for an item with (note the underscore "_", which is optional at the end, and can e used in any of the three fields) :
+You can also "find" the last value for an item with (note the underscore "_", which is optional at the end, and can be used in any of the three fields) :
 
-    $ pointrel find $THE_ITEM$ $THE_RELATIONSHIP$ _
+    $ pointrel find $ITEM $RELATIONSHIP _
 
 You can find all the matches for something, which lists the file ID something is in with:
 
-    $ pointrel findall $THE_ITEM$ $THE_RELATIONSHIP$ _
+    $ pointrel findall $ITEM $RELATIONSHIP _
 
-    $ pointrel findall _ $THE_RELATIONSHIP$ $THE_VALUE_
+    $ pointrel findall _ $RELATIONSHIP $VALUE
 
 You can delete previously added relationships if you know their timestamp ID (from the previous command, or from inspecting the files under the resources directory) with the delete command:
 
-    $ pointrel delete $SOME_TIMESTAMP_ID$
+    $ pointrel delete $SOME_TIMESTAMP_ID
 
 ### Screenshot of using Pointrel command line to add a "thought"
 
@@ -50,19 +51,19 @@ To get the webserver running in the background to use the pages:
 
     $ pointrel server &
 
-To add web pages fr display, create a triple like so (replace $PAGE_NAME$ with your page name):
+To add web pages fr display, create a triple like so (replace $PAGE_NAME with your page name):
 
-    $ pointrel add page:$PAGE_NAME$ content 'Your page content...'
+    $ pointrel add page:$PAGE_NAME content 'Your page content...'
 
-You can also specify a contentType if it is not the default "text/plain" like so:
+You can also specify a content-type if it is not the default "text/plain" like so:
 
-    $ pointrel add page:$PAGE_NAME$ contentType 'text/html'
+    $ pointrel add page:$PAGE_NAME content-type 'text/html'
 
-    $ pointrel add page:$PAGE_NAME$ contentType 'application/javascript'
+    $ pointrel add page:$PAGE_NAME content-type 'application/javascript'
 
 As an example, to add the content for a bootstrap page running as "http://localhost:8000/test.html" using bash in the project directory:
 
-    $ pointrel add page:test.html contentType "text/html"
+    $ pointrel add page:test.html content-type "text/html"
     $ pointrel add page:test.html content "$(< add_test.html)"
 
 That bootstrap file supports defining new triples, so you can define new pages or even upgrade the bootstrap page itself. You can add web content files with any extension or none at all, but you need to set the content type appropriately for non-text files. You can specify arbitrary paths with slashes in them. You can add JavaScript files to make complex apps (but you should set the contentType for them). You can store data back to the server as a new triple using a POST command from JavaScript (see add_test.html for an example). There may be a short delay (currently up to one second) before the webserver picks up changes.
