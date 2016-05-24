@@ -46,7 +46,7 @@ if (command === "help") {
 function add(a, b, c) {
   var currentTimeInMillseconds = new Date().getTime();
   var contents = {command: "add", timestamp: currentTimeInMillseconds, a: a, b: b, c: c};
-  var fileName = "resources/pointrel_" + currentTimeInMillseconds + ".json";
+  var fileName = __dirname + "/resources/pointrel_" + currentTimeInMillseconds + ".json";
   var output = JSON.stringify(contents, null, 2) + "\n";
   fs.writeFileSync(fileName, output);
   return currentTimeInMillseconds;
