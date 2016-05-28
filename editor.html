@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Pointrel editor</title>
+    <style>
+      label {
+        display: inline-block;
+        width: 115px;
+      }
+      #resultDiv div, #formNode div {
+        margin-bottom: 5px;
+      }
+    </style>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/mithril/0.2.5/mithril.min.js"></script>
+  </head>
+  <body>
+    <h2 id="javascriptWarning">Please enable JavaScript to use this form</h2>
+<script>
+
+function controller() { }
+
+function view() { 
+  return m("div", "hello"); 
+}
+
+m.mount(document.body, {controller: controller, view: view});
+</script>
+  </body>
+</html>
