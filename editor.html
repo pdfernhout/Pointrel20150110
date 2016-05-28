@@ -1,55 +1,55 @@
 <!DOCTYPE HTML>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Pointrel editor</title>
-    <style>
-      label {
-        display: inline-block;
-        width: 115px;
-      }
-      #resultDiv div, #formNode div {
-        margin-bottom: 5px;
-      }
-    </style>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/mithril/0.2.5/mithril.min.js"></script>
-  </head>
-  <body>
-    <h2 id="javascriptWarning">Please enable JavaScript to use this form</h2>
+    <head>
+        <meta charset="utf-8">
+        <title>Pointrel editor</title>
+        <style>
+            label {
+                display: inline-block;
+                width: 2em;
+            }
+            #resultDiv div, #formNode div {
+                margin-bottom: 5px;
+            }
+        </style>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/mithril/0.2.5/mithril.min.js"></script>
+    </head>
+    <body>
+        <h2 id="javascriptWarning">Please enable JavaScript to use this form</h2>
 <script>
 var javascriptWarning = document.getElementById('javascriptWarning');
 javascriptWarning.style.display = 'none';
-          
+
 function controller() { }
 
 function view() { 
-  return m("div.editor", [
-  	m("form[id='formNode']", [
-			m("div", [
-        m("label", "a: "),
-        m("input[name='a'][type='text']")
-      ]),
-			m("div", [
-        m("label", "b: "),
-        m("input[name='b'][type='text']")
-      ]),
-			m("div", [
-        m("label", "c: "),
-        m("textarea[form='formNode'][id='c'][name='c']")
-      ]),
-			m("button[type='submit']", "Add")
-		]),
-		m("button[id='findLastCButton']", "Find last C"),
-		m("[id='resultDiv']", [
-			m("div", [
-        m("label", "Server Message:"),
-        m("span[id='svrMessage']")
-      ])
-		])
-  ]);
+    return m("div.editor", [
+        m("form[id='formNode']", [
+            m("div", [
+                m("label", "a: "),
+                m("input[name='a'][type='text']")
+            ]),
+            m("div", [
+                m("label", "b: "),
+                m("input[name='b'][type='text']")
+            ]),
+            m("div", [
+                m("label", "c: "),
+                m("textarea[form='formNode'][id='c'][name='c']")
+            ]),
+            m("button[type='submit']", "Add")
+        ]),
+        m("button[id='findLastCButton']", "Find last C"),
+        m("[id='resultDiv']", [
+            m("div", [
+                m("label", "Server Message:"),
+                m("span[id='svrMessage']")
+            ])
+        ])
+    ]);
 }
 
 m.mount(document.body, {controller: controller, view: view});
 </script>
-  </body>
+    </body>
 </html>
