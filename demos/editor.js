@@ -24,10 +24,8 @@ function view() {
         m("div", ["data is ", JSON.stringify(data) ]),
         m("button", { onclick: findLastCClicked }, "Find last C"),
         m("#resultDiv", [
-            m("div", [
-                m("label", "Message from server:"),
-                m("span#serverMessage")
-            ])
+            m("label", "Message from server:"),
+            m("span#serverMessage")
         ])
     ]);
 }
@@ -38,6 +36,19 @@ function addClicked() {
 
 function findLastCClicked() {
     console.log("findLastCClicked");
+    var formData = new FormData();
+    formData.append("a", data.a);
+    formData.append("b", data.b);
+    formData.append("c", data.c);
+    m.request({
+        url: "/findLastC",
+        method: "POST",
+        data: formData,
+        serialize: function(data) { return data; },
+        deserialize: function(data) { return data; }
+    }).then(function(response) {
+        data.c = response;
+    });
 }
 
 m.mount(document.body, {controller: controller, view: view});

@@ -296,7 +296,10 @@ function serverHandler(request, response) {
         }
       });
       request.on('end', function() {
+        console.log("request", request);
+        console.log("requestBody", requestBody);
         var formData = qs.parse(requestBody);
+        console.log("formData", formData.a, formData.b, formData);
         updateDataIfStale();
         var content;
         if (!formData.a || !formData.b) {
