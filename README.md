@@ -71,11 +71,15 @@ You can also specify a content-type if it is not the default "text/plain" like s
 
 As an example, to add the content for a bootstrap editor running as "http://localhost:8000/editor.html" using bash in the project directory:
 
-    $ pointrel add page:editor.html content-type "text/html"
     $ pointrel add page:editor.html content "$(< demos/editor.html)"
+    $ pointrel add page:editor.html content-type "text/html"
     
-    $ pointrel add page:editor.js content-type "application/javascript"
     $ pointrel add page:editor.js content "$(< demos/editor.js)"
+    $ pointrel add page:editor.js content-type "application/javascript"
+    
+Setting the content-type for those two demos files is actually optional,
+as URLs ending in .html and .js will have their content-type guessed correctly if not set.
+The default content-type otherwise if it is not set is "text/plain".
 
 That bootstrap file supports defining new triples, so you can define new pages or even upgrade the bootstrap page itself.
 You can add web content files with any extension or none at all, but you need to set the content type appropriately for non-text files.

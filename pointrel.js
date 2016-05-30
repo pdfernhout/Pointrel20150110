@@ -247,7 +247,7 @@ function updateDataIfStale() {
 
 function serverHandler(request, response) {
   if (request.method === "GET") {
-    var contentType = "text/plain";
+    var defaultContentType = "text/plain";
     var url = request.url;
     console.log("Requesting:", url);
     // TODO: improve; should not be reading all the data with every page request, even with ten second delay
@@ -259,9 +259,14 @@ function serverHandler(request, response) {
       response.writeHead(404, 'Resource Not Found', {'Content-Type': 'text/plain'});
       response.end("URL not found: " + url);
     } else {
-      var specificContentType = last(pageID, "content-type");
-      if (specificContentType) contentType = specificContentType;
-      console.log("content-type: '" + specificContentType + "'");  
+      var contentType = last(pageID, "content-type");
+      // Guess at content-type if not specified
+      if (!contentType) {
+        if (strEndsWith(url, ".html")) contentType = "text/html";
+        else if (strEndsWith(url, ".js")) contentType = "application/javascript";
+        else contentType = defaultContentType;
+      }
+      console.log("content-type: '" + contentType + "'");  
       response.writeHead(200, {"Content-Type": contentType});
       content = "" + content;
       response.end(content);
@@ -311,6 +316,7 @@ function serverHandler(request, response) {
         }
         updateDataIfStale();
         var content;
+        var success = true;
         if (!formData.a || !formData.b) {
           content = "";
           var search = [];
@@ -320,10 +326,11 @@ function serverHandler(request, response) {
               content += resultKey + "\n";
           }
         }  else {
-           content = "" + last(formData.a, formData.b);
+           content = last(formData.a, formData.b);
+           if (content === null) success = false;
         }
         response.writeHead(200, {'Content-Type': 'application/json'});
-        response.end(JSON.stringify({success: true, content: content}));
+        response.end(JSON.stringify({success: success, content: content}));
       });
     } else {
       response.writeHead(404, 'Resource Not Found', {'Content-Type': 'application/json'});
