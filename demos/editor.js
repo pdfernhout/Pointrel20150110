@@ -15,15 +15,15 @@ function view() {
             ]),
             m("div", [
                 m("label", "b: "),
-                m("input")
+                m("input", { value: data.b, onchange: m.withAttr("value", function (value) { data.b = value; })})
             ]),
             m("div", [
                 m("label", "c: "),
-                m("textarea")
+                m("textarea", { value: data.c, onchange: m.withAttr("value", function (value) { data.c = value; })})
             ]),
             m("button", "Add")
         ]),
-        m("div", ["A is:", data.a ]),
+        m("div", ["data is ", JSON.stringify(data) ]),
         m("button", "Find last C"),
         m("#resultDiv", [
             m("div", [
