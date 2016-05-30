@@ -64,7 +64,7 @@ You can also specify a content-type if it is not the default "text/plain" like s
 As an example, to add the content for a bootstrap page running as "http://localhost:8000/test.html" using bash in the project directory:
 
     $ pointrel add page:test.html content-type "text/html"
-    $ pointrel add page:test.html content "$(< add_test.html)"
+    $ pointrel add page:test.html content "$(< demos/add_test.html)"
 
 That bootstrap file supports defining new triples, so you can define new pages or even upgrade the bootstrap page itself. You can add web content files with any extension or none at all, but you need to set the content type appropriately for non-text files. You can specify arbitrary paths with slashes in them. You can add JavaScript files to make complex apps (but you should set the contentType for them). You can store data back to the server as a new triple using a POST command from JavaScript (see add_test.html for an example). There may be a short delay (currently up to one second) before the webserver picks up changes.
 
