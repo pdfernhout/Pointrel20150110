@@ -22,28 +22,35 @@ javascriptWarning.style.display = 'none';
 
 function controller() { }
 
+var data = {
+    a: "",
+    b: "", 
+    c: ""
+}
+
 function view() { 
     return m("div.editor", [
         m("form[id='formNode']", [
             m("div", [
                 m("label", "a: "),
-                m("input[name='a'][type='text']")
+                m("input", { value: data.a, onchange: m.withAttr(function (value) { data.a = value; })})
             ]),
             m("div", [
                 m("label", "b: "),
-                m("input[name='b'][type='text']")
+                m("input")
             ]),
             m("div", [
                 m("label", "c: "),
-                m("textarea[form='formNode'][id='c'][name='c']")
+                m("textarea")
             ]),
-            m("button[type='submit']", "Add")
+            m("button", "Add")
         ]),
-        m("button[id='findLastCButton']", "Find last C"),
-        m("[id='resultDiv']", [
+        m("div", ["A is:", data.a ]),
+        m("button", "Find last C"),
+        m("#resultDiv", [
             m("div", [
                 m("label", "Server Message:"),
-                m("span[id='svrMessage']")
+                m("span#serverMessage")
             ])
         ])
     ]);
