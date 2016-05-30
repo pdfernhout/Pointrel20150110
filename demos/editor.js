@@ -21,10 +21,10 @@ function view() {
                 m("label", "c: "),
                 m("textarea", { value: data.c, onchange: m.withAttr("value", function (value) { data.c = value; })})
             ]),
-            m("button", "Add")
+            m("button", { onclick: addClicked }, "Add")
         ]),
         m("div", ["data is ", JSON.stringify(data) ]),
-        m("button", "Find last C"),
+        m("button", { onclick: findLastCClicked }, "Find last C"),
         m("#resultDiv", [
             m("div", [
                 m("label", "Server Message:"),
@@ -32,6 +32,14 @@ function view() {
             ])
         ])
     ]);
+}
+
+function addClicked() {
+    console.log("addClicked");
+}
+
+function findLastCClicked() {
+    console.log("findLastCClicked");
 }
 
 m.mount(document.body, {controller: controller, view: view});
