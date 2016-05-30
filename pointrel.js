@@ -268,8 +268,8 @@ function serverHandler(request, response) {
       request.on('data', function(data) {
         requestBody += data;
         if (requestBody.length > 1e7) {
-          response.writeHead(413, 'Request Entity Too Large', {'Content-Type': 'text/html'});
-          response.end('<!doctype html><html><head><title>413</title></head><body>413: Request Entity Too Large</body></html>');
+          response.writeHead(413, 'Request Entity Too Large', {'Content-Type': 'application/json'});
+          response.end(JSON.stringify({success: false, reason: "Request entity too large"}));
         }
       });
       request.on('end', function() {
@@ -277,20 +277,15 @@ function serverHandler(request, response) {
         var formData = JSON.parse(requestBody);
         var id = add(formData.a, formData.b, formData.c);
         response.writeHead(200, {'Content-Type': 'text/html'});
-        response.write('<!doctype html><html><head><title>response</title></head><body>');
-        response.write('Thanks for the data!<br />:id ' + id);
-        response.write('<br />a: ' + formData.a);
-        response.write('<br />b: ' + formData.b);
-        response.write('<br />c: ' + formData.c);
-        response.end('</body></html>');
+        response.end(JSON.stringify({success: true, formData: formData}));
       });
     } else if (request.url === "/findLastC") {
       var requestBody = '';
       request.on('data', function(data) {
         requestBody += data;
         if (requestBody.length > 1e7) {
-          response.writeHead(413, 'Request Entity Too Large', {'Content-Type': 'text/html'});
-          response.end('<!doctype html><html><head><title>413</title></head><body>413: Request Entity Too Large</body></html>');
+          response.writeHead(413, 'Request Entity Too Large', {'Content-Type': 'application/json'});
+          response.end(JSON.stringify({success: false, reason: "Request entity too large"}));
         }
       });
       request.on('end', function() {
@@ -308,16 +303,16 @@ function serverHandler(request, response) {
         }  else {
            content = "" + last(formData.a, formData.b);
         }
-        response.writeHead(200, {'Content-Type': 'text/plain'});
-        response.end(content);
+        response.writeHead(200, {'Content-Type': 'application/json'});
+        response.end(JSON.stringify({success: true, content: content}));
       });
     } else {
-      response.writeHead(404, 'Resource Not Found', {'Content-Type': 'text/html'});
-      response.end('<!doctype html><html><head><title>404</title></head><body>404: Resource Not Found</body></html>');
+      response.writeHead(404, 'Resource Not Found', {'Content-Type': 'application/json'});
+      response.end(JSON.stringify({success: false, reason: "Resource Not Found"}));
     }
   } else {
-  response.writeHead(405, 'Method Not Supported', {'Content-Type': 'text/html'});
-  return response.end('<!doctype html><html><head><title>405</title></head><body>405: Method Not Supported</body></html>');
+    response.writeHead(405, 'Method Not Supported', {'Content-Type': 'application/json'});
+    response.end(JSON.stringify({success: false, reason: "Method Not Supported"}));
   }
 }
 

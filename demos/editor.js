@@ -39,10 +39,9 @@ function findLastCClicked() {
     m.request({
         url: "/findLastC",
         method: "POST",
-        data: data,
-        deserialize: function(data) { return data; }
+        data: data
     }).then(function(response) {
-        data.c = response;
+        data.c = response.content;
     });
 }
 
