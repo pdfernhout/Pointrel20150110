@@ -11,7 +11,7 @@ function view() {
         m("form[id='formNode']", [
             m("div", [
                 m("label", "a: "),
-                m("input", { value: data.a, onchange: m.withAttr(function (value) { data.a = value; })})
+                m("input", { value: data.a, onchange: m.withAttr("value", function (value) { data.a = value; })})
             ]),
             m("div", [
                 m("label", "b: "),
