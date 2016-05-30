@@ -50,7 +50,7 @@ function findLastCClicked() {
         method: "POST",
         data: data
     }).then(function(response) {
-        data.c = response.content;
+        data.c = response.content && response.content.c;
     });
 }
 

@@ -34,6 +34,7 @@ function displayHelp() {
   console.log("  uuid -- generate random uuid");
   console.log("  now -- the time right now in milliseconds");
   console.log("  current -- the result of 'pointrel find current value _'");
+  console.log("  upload fileName -- upload the local file as web content prefixed by 'page:'");
   console.log("  server -- web server displaying pages using 'pointrel findpage:$NAME content _'");
   console.log("      set the web page content-type using page:$NAME content-type $TYPE");
   console.log("  help -- show this text");
@@ -47,6 +48,10 @@ if (command === "help") {
 function add(a, b, c) {
   var currentTimeInMillseconds = new Date().getTime();
   var contents = {command: "add", timestamp: currentTimeInMillseconds, a: a, b: b, c: c};
+  if (Buffer.isBuffer(c)) {
+    contents.c = c.toString("hex");
+    contents.cEncoding = "hex";
+  }
   var fileName = __dirname + "/resources/pointrel_" + currentTimeInMillseconds + ".json";
   var output = JSON.stringify(contents, null, 2) + "\n";
   fs.writeFileSync(fileName, output);
@@ -105,7 +110,6 @@ function readData()  {
     var fullFileName = resourcesDirectory + '/' + shortFileName;
     try {
       var data = JSON.parse(fs.readFileSync(fullFileName, 'utf8'));
-      // console.log("read:", fullFileName, data);
       resources[shortFileName.substring(9).substring(0, shortFileName.length - 14)] = data;
     } catch (e) {
       console.log("Problem reading file", fullFileName);
@@ -115,7 +119,7 @@ function readData()  {
 
 // Issue with believing timestamps vs. modifying/reactingTo thing as-it-is (especially clock is wrong sometime).
 
-function find(a, b, c) {
+function find(a, b, c, returnFullRecord) {
   var results = [];
   for (var key in resources) {
     var data = resources[key];
@@ -123,11 +127,15 @@ function find(a, b, c) {
       if (b === "_" || data.b === b) {
          if (c === "_" || data.c === c) {
            // Match
-           var result = [key]
-           if (a === "_") result.push(data.a);
-           if (b === "_") result.push(data.b);
-           if (c === "_") result.push(data.c);
-           results.push(result);
+           if (returnFullRecord) {
+             results.push(data);
+           } else {
+             var result = [key]
+             if (a === "_") result.push(data.a);
+             if (b === "_") result.push(data.b);
+             if (c === "_") result.push(data.c);
+             results.push(result);
+           }
          }
        }
     }
@@ -223,10 +231,35 @@ if (command === "current") {
   process.exit(0);
 }
 
-function last(a, b) {
-    var results = find(a, b, "_");
+
+if (command === "upload") {
+  var uploadFileName = args[0];
+  if (!uploadFileName) {
+    console.log("missing file name");
+    process.exit(-1);
+  }
+  console.log("Uploading from", uploadFileName);
+  try {
+    var contentBuffer = fs.readFileSync(uploadFileName);
+    var convertedBufferString = contentBuffer.toString();
+    var convertedBuffer = new Buffer(convertedBufferString);
+    var validUnicode = contentBuffer.toString("hex") === convertedBuffer.toString("hex");
+    var content = contentBuffer;
+    if (validUnicode) content = convertedBufferString;
+    console.log("validUnicode", validUnicode);
+    add("page:" + uploadFileName, "content", content);
+    process.exit(0);
+  } catch (e) {
+    console.log("problem reading file", uploadFileName);
+    process.exit(-1);    
+  }
+}
+
+function last(a, b, returnFullRecord) {
+    var results = find(a, b, "_", returnFullRecord);
     if (results.length) {
       var lastResult = results[results.length - 1];
+      if (returnFullRecord) return lastResult;
       return lastResult[lastResult.length - 1];
     } else {
       return null;
@@ -254,7 +287,12 @@ function serverHandler(request, response) {
     updateDataIfStale();
     if (url === "/") url = "/index.html";
     var pageID = "page:" + url.substring(1);
-    var content = last(pageID, "content");
+    var contentRecord = last(pageID, "content", true);
+    console.log("contentRecord", contentRecord);
+    var content = contentRecord && contentRecord.c;
+    if (contentRecord && contentRecord.cEncoding) {
+      content = new Buffer(content, contentRecord.cEncoding);
+    }
     if (content === null) {
       response.writeHead(404, 'Resource Not Found', {'Content-Type': 'text/plain'});
       response.end("URL not found: " + url);
@@ -272,7 +310,6 @@ function serverHandler(request, response) {
       }
       console.log("content-type: '" + contentType + "'");  
       response.writeHead(200, {"Content-Type": contentType});
-      content = "" + content;
       response.end(content);
     }
   } else if (request.method === "POST") {
@@ -329,8 +366,9 @@ function serverHandler(request, response) {
           for (var resultKey in results) {
               content += resultKey + "\n";
           }
+          content = { c: content };
         }  else {
-           content = last(formData.a, formData.b);
+           content = last(formData.a, formData.b, true);
            if (content === null) success = false;
         }
         response.writeHead(200, {'Content-Type': 'application/json'});
