@@ -288,7 +288,6 @@ function serverHandler(request, response) {
     if (url === "/") url = "/index.html";
     var pageID = "page:" + url.substring(1);
     var contentRecord = last(pageID, "content", true);
-    console.log("contentRecord", contentRecord);
     var content = contentRecord && contentRecord.c;
     if (contentRecord && contentRecord.cEncoding) {
       content = new Buffer(content, contentRecord.cEncoding);
