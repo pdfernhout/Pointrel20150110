@@ -88,6 +88,9 @@ You can add more JavaScript files to make complex apps (but you should set the c
 You can store data back to the server as a new triple using a POST command from JavaScript (see add_test.html for an example).
 There may be a short delay (currently up to one second) before the webserver picks up changes store via the command line.
 
+There is also a more complex IBIS demo. You can load the files by running "upload-ibis.sh" after cd-ing to the demos directory.
+You can then run that demo by opening the URL of "http://localhost:8000/ibis/ibis.html".
+
 ### Screenshots from updating the README.txt file (before it became README.md to include the screenshots and before further improvements):
 
 ![Pointrel20150110 screenshot adding README content via web interface](/screenshots/Pointrel20150110-screenshot-adding-README-content-via-web-interface.png?raw=true "Optional Title")
