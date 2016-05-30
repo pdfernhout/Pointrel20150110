@@ -262,8 +262,12 @@ function serverHandler(request, response) {
       var contentType = last(pageID, "content-type");
       // Guess at content-type if not specified
       if (!contentType) {
+        // TODO: Generalize list of types
         if (strEndsWith(url, ".html")) contentType = "text/html";
         else if (strEndsWith(url, ".js")) contentType = "application/javascript";
+        else if (strEndsWith(url, ".png")) contentType = "image/png";
+        else if (strEndsWith(url, ".jpeg")) contentType = "image/jpeg";
+        else if (strEndsWith(url, ".gif")) contentType = "image/gif";
         else contentType = defaultContentType;
       }
       console.log("content-type: '" + contentType + "'");  
