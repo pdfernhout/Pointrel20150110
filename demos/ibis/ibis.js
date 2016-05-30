@@ -13,7 +13,7 @@ require([
     "dojox/gfx/move",
     "dojox/gfx/Moveable",
     "dojox/xml/parser",
-    "js/pointrel20141201Client",
+//    "js/pointrel20141201Client",
     "dojo/query",
     "dojox/layout/ResizeHandle",
     "dijit/form/SimpleTextarea",
@@ -35,7 +35,7 @@ require([
     move,
     Moveable,
     parser,
-    pointrel20141201Client,
+//    pointrel20141201Client,
     query,
     ResizeHandle,
     SimpleTextarea,
@@ -482,7 +482,7 @@ require([
             entityToolbar.addChild(new ToolbarSeparator());
         } else {
             var commandButton = new Button({
-                label: '<img src="/CrystalClearIcons/' + commandName + '.png" alt="' + commandName + '"/>',
+                label: '<img src="/ibis/CrystalClearIcons/' + commandName + '.png" alt="' + commandName + '"/>',
                 showLabel: true,
                 iconClass: "toolbarIcon toolbarIcon-" + commandName,
                 title: commandName,
