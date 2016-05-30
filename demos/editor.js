@@ -26,8 +26,8 @@ function view() {
         m("div", ["data is ", JSON.stringify(data) ]),
         m("button", { onclick: findLastCClicked }, "Find last C"),
         m("#resultDiv", [
-            m("label", "Message from server:"),
-            m("span#serverMessage", serverMessage)
+            "Message from server: ",
+            m("pre#serverMessage", serverMessage)
         ])
     ]);
 }
