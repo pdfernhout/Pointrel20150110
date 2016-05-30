@@ -8,26 +8,24 @@ var data = {
 
 function view() { 
     return m("div.editor", [
-        m("form[id='formNode']", [
-            m("div", [
-                m("label", "a: "),
-                m("input", { value: data.a, onchange: m.withAttr("value", function (value) { data.a = value; })})
-            ]),
-            m("div", [
-                m("label", "b: "),
-                m("input", { value: data.b, onchange: m.withAttr("value", function (value) { data.b = value; })})
-            ]),
-            m("div", [
-                m("label", "c: "),
-                m("textarea", { value: data.c, onchange: m.withAttr("value", function (value) { data.c = value; })})
-            ]),
-            m("button", { onclick: addClicked }, "Add")
+        m("div", [
+            m("label", "a: "),
+            m("input", { value: data.a, onchange: m.withAttr("value", function (value) { data.a = value; })})
         ]),
+        m("div", [
+            m("label", "b: "),
+            m("input", { value: data.b, onchange: m.withAttr("value", function (value) { data.b = value; })})
+        ]),
+        m("div", [
+            m("label", "c: "),
+            m("textarea", { value: data.c, onchange: m.withAttr("value", function (value) { data.c = value; })})
+        ]),
+        m("button", { onclick: addClicked }, "Add"),
         m("div", ["data is ", JSON.stringify(data) ]),
         m("button", { onclick: findLastCClicked }, "Find last C"),
         m("#resultDiv", [
             m("div", [
-                m("label", "Server Message:"),
+                m("label", "Message from server:"),
                 m("span#serverMessage")
             ])
         ])
