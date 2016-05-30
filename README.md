@@ -66,6 +66,13 @@ As an example, to add the content for a bootstrap page running as "http://localh
     $ pointrel add page:test.html content-type "text/html"
     $ pointrel add page:test.html content "$(< demos/add_test.html)"
 
+To load in an editor, try:
+
+    $ pointrel add page:editor.html content-type "text/html"
+    $ pointrel add page:editor.html content "$(< demos/editor.html)"
+    $ pointrel add page:editor.js content-type "application/javascript"
+    $ pointrel add page:editor.js content "$(< demos/editor.js)"
+
 That bootstrap file supports defining new triples, so you can define new pages or even upgrade the bootstrap page itself. You can add web content files with any extension or none at all, but you need to set the content type appropriately for non-text files. You can specify arbitrary paths with slashes in them. You can add JavaScript files to make complex apps (but you should set the contentType for them). You can store data back to the server as a new triple using a POST command from JavaScript (see add_test.html for an example). There may be a short delay (currently up to one second) before the webserver picks up changes.
 
 ### Screenshots from updating the README.txt file (before if became README.md to include the screenshots):
