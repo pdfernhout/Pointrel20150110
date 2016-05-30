@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"> 
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>IBIS for Twirlip Information Organizer</title>
+<script src="//ajaxorg.github.io/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojo/resources/dojo.css">
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dijit/themes/dijit.css">
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dijit/themes/claro/claro.css">
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojox/layout/resources/ResizeHandle.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojox/widget/Toaster/Toaster.css" >
+
+<script>
+    var dojoConfig;
+    (function(){
+        var baseUrl = "/lib/";
+        dojoConfig = {
+            async: true,
+            parseOnLoad: false,
+            packages: [
+                { name: "js", location: location.pathname.replace(/\/[^/]+$/, '') + "/js"},
+                { name: "IBIS", location: location.pathname.replace(/\/[^/]+$/, '') + "/IBIS"},
+                { name: "lib", location: baseUrl}
+            ]
+        };
+    }());
+</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojo/dojo.js"></script>
+
+</head>
+
+<body class="claro">
+    <noscript>Please enable JavaScript to use Twirlip.</noscript>
+    <div id="startup" style="display: none"><b>Starting up Twirlip; please wait...</b></div>
+    <script>console.log("started loading..."); document.getElementById("startup").style.display="block";</script>
+<script src="ibis.js"></script>
+</body>
+</html>
