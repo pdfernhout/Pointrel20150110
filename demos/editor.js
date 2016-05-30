@@ -6,6 +6,8 @@ var data = {
     c: ""
 }
 
+var serverMessage = "";
+
 function view() { 
     return m("div.editor", [
         m("div", [
@@ -25,13 +27,20 @@ function view() {
         m("button", { onclick: findLastCClicked }, "Find last C"),
         m("#resultDiv", [
             m("label", "Message from server:"),
-            m("span#serverMessage")
+            m("span#serverMessage", serverMessage)
         ])
     ]);
 }
 
 function addClicked() {
-    console.log("addClicked");
+    console.log("addClicked")
+    m.request({
+        url: "/add",
+        method: "POST",
+        data: data
+    }).then(function(response) {
+        serverMessage = JSON.stringify(response, null, 2);
+    });
 }
 
 function findLastCClicked() {
