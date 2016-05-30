@@ -36,15 +36,10 @@ function addClicked() {
 
 function findLastCClicked() {
     console.log("findLastCClicked");
-    var formData = new FormData();
-    formData.append("a", data.a);
-    formData.append("b", data.b);
-    formData.append("c", data.c);
     m.request({
         url: "/findLastC",
         method: "POST",
-        data: formData,
-        serialize: function(data) { return data; },
+        data: data,
         deserialize: function(data) { return data; }
     }).then(function(response) {
         data.c = response;

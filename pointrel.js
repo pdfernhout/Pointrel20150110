@@ -263,8 +263,6 @@ function serverHandler(request, response) {
       response.end(content);
     }
   } else if (request.method === "POST") {
-    // TODO: Eventually move require to top of file
-    var qs = require('querystring');
     if (request.url === "/add") {
       var requestBody = '';
       request.on('data', function(data) {
@@ -276,7 +274,7 @@ function serverHandler(request, response) {
       });
       request.on('end', function() {
         // TODO: Sanitize inputs?
-        var formData = qs.parse(requestBody);
+        var formData = JSON.parse(requestBody);
         var id = add(formData.a, formData.b, formData.c);
         response.writeHead(200, {'Content-Type': 'text/html'});
         response.write('<!doctype html><html><head><title>response</title></head><body>');
@@ -296,10 +294,7 @@ function serverHandler(request, response) {
         }
       });
       request.on('end', function() {
-        console.log("request", request);
-        console.log("requestBody", requestBody);
-        var formData = qs.parse(requestBody);
-        console.log("formData", formData.a, formData.b, formData);
+        var formData = JSON.parse(requestBody);
         updateDataIfStale();
         var content;
         if (!formData.a || !formData.b) {
