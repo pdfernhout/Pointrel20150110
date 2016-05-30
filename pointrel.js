@@ -103,9 +103,13 @@ function readData()  {
     var isResourceFile = strStartsWith(shortFileName, "pointrel_") && strEndsWith(shortFileName, ".json");
     if (!isResourceFile) continue;  
     var fullFileName = resourcesDirectory + '/' + shortFileName;
-    var data = JSON.parse(fs.readFileSync(fullFileName, 'utf8'));
-    // console.log("read:", fullFileName, data);
-    resources[shortFileName.substring(9).substring(0, shortFileName.length - 14)] = data;
+    try {
+      var data = JSON.parse(fs.readFileSync(fullFileName, 'utf8'));
+      // console.log("read:", fullFileName, data);
+      resources[shortFileName.substring(9).substring(0, shortFileName.length - 14)] = data;
+    } catch (e) {
+      console.log("Problem reading file", fullFileName);
+    }
   }
 }
 
@@ -263,6 +267,7 @@ function serverHandler(request, response) {
       response.end(content);
     }
   } else if (request.method === "POST") {
+    console.log("POST request.url", request.url);
     if (request.url === "/add") {
       var requestBody = '';
       request.on('data', function(data) {
@@ -274,7 +279,14 @@ function serverHandler(request, response) {
       });
       request.on('end', function() {
         // TODO: Sanitize inputs?
-        var formData = JSON.parse(requestBody);
+        var formData;
+        try {
+          formData = JSON.parse(requestBody);
+        } catch (e) {
+          response.writeHead(400, 'Bad request', {'Content-Type': 'application/json'});
+          response.end(JSON.stringify({success: false, reason: "Bad request", exception: "" + e}));
+          return;
+        }
         var id = add(formData.a, formData.b, formData.c);
         response.writeHead(200, {'Content-Type': 'text/html'});
         response.end(JSON.stringify({success: true, formData: formData}));
@@ -289,7 +301,14 @@ function serverHandler(request, response) {
         }
       });
       request.on('end', function() {
-        var formData = JSON.parse(requestBody);
+        var formData;
+        try {
+          formData = JSON.parse(requestBody);
+        } catch (e) {
+          response.writeHead(400, 'Bad request', {'Content-Type': 'application/json'});
+          response.end(JSON.stringify({success: false, reason: "Bad request", exception: "" + e}));
+          return;
+        }
         updateDataIfStale();
         var content;
         if (!formData.a || !formData.b) {
