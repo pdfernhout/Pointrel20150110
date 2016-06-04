@@ -32,7 +32,6 @@ function view() {
     ]);
 }
 
-/* TODO -- call this below
 // returns promise that gets response
 function pointrel_add(a, b, c) {
     return m.request({
@@ -61,27 +60,18 @@ function pointrel_findLastC(a, b) {
         }
     })
 }
-*/
     
 function addClicked() {
     console.log("addClicked")
-    m.request({
-        url: "/add",
-        method: "POST",
-        data: data
-    }).then(function(response) {
+    pointrel_add(data.a, data.b, data.c).then(function(response) {
         serverMessage = JSON.stringify(response, null, 2);
     });
 }
 
 function findLastCClicked() {
     console.log("findLastCClicked");
-    m.request({
-        url: "/findLastC",
-        method: "POST",
-        data: data
-    }).then(function(response) {
-        data.c = response.content && response.content.c;
+    pointrel_findLastC(data.a, data.b).then(function(c) {
+        data.c = c;
     });
 }
 
