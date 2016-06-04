@@ -231,30 +231,6 @@ if (command === "current") {
   process.exit(0);
 }
 
-
-if (command === "upload") {
-  var uploadFileName = args[0];
-  if (!uploadFileName) {
-    console.log("missing file name");
-    process.exit(-1);
-  }
-  console.log("Uploading from", uploadFileName);
-  try {
-    var contentBuffer = fs.readFileSync(uploadFileName);
-    var convertedBufferString = contentBuffer.toString();
-    var convertedBuffer = new Buffer(convertedBufferString);
-    var validUnicode = contentBuffer.toString("hex") === convertedBuffer.toString("hex");
-    var content = contentBuffer;
-    if (validUnicode) content = convertedBufferString;
-    console.log("validUnicode", validUnicode);
-    add("page:" + uploadFileName, "content", content);
-    process.exit(0);
-  } catch (e) {
-    console.log("problem reading file", uploadFileName);
-    process.exit(-1);    
-  }
-}
-
 function last(a, b, returnFullRecord) {
     var results = find(a, b, "_", returnFullRecord);
     if (results.length) {
@@ -264,6 +240,47 @@ function last(a, b, returnFullRecord) {
     } else {
       return null;
     }
+}
+
+function checkIfExists(a, b, c) {
+      var triple = last(pageName, "content", true);
+      if (!triple) return false;
+      var shouldBeHex = Buffer.isBuffer(c);
+      if (shouldBeHex) {
+        if (triple.cEncoding !== "hex") return false;
+        var cAsHex = c.toString("hex");
+        return triple.c === cAsHex;
+      }
+      return triple.c === c;
+}
+
+if (command === "upload") {
+  var uploadFileName = args[0];
+  if (!uploadFileName) {
+    console.log("missing file name");
+    process.exit(-1);
+  }
+  try {
+    var contentBuffer = fs.readFileSync(uploadFileName);
+    var convertedBufferString = contentBuffer.toString();
+    var convertedBuffer = new Buffer(convertedBufferString);
+    var validUnicode = contentBuffer.toString("hex") === convertedBuffer.toString("hex");
+    var content = contentBuffer;
+    if (validUnicode) content = convertedBufferString;
+    // console.log("validUnicode", validUnicode);
+    var pageName = "page:" + uploadFileName;
+    readData();
+    if (checkIfExists(pageName, "content", content)) {
+      console.log("Not uploading identical content", uploadFileName);
+    } else {
+      console.log("Uploading from", uploadFileName);
+      add(pageName, "content", content);
+    }
+    process.exit(0);
+  } catch (e) {
+    console.log("problem reading file", uploadFileName);
+    process.exit(-1);    
+  }
 }
 
 var refreshDelay_ms = 1000;
