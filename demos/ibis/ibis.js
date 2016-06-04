@@ -13,8 +13,8 @@ require([
     "dojox/gfx/move",
     "dojox/gfx/Moveable",
     "dojox/xml/parser",
-//    "js/pointrel20141201Client",
     "dojo/query",
+    "dojo/request",
     "dojox/layout/ResizeHandle",
     "dijit/form/SimpleTextarea",
     "dijit/form/TextBox",
@@ -35,8 +35,8 @@ require([
     move,
     Moveable,
     parser,
-//    pointrel20141201Client,
     query,
+    request,
     ResizeHandle,
     SimpleTextarea,
     TextBox,
@@ -75,6 +75,34 @@ require([
         
        childContentPane.placeAt(contentPane);
        return childContentPane;
+    }
+    
+    // returns promise that gets response
+    function pointrel_add(a, b, c) {
+        return request("/add", {
+            method: "POST",
+            handleAs: "json",
+            data: JSON.stringify({
+                a: a,
+                b: b,
+                c: c
+            })
+        });
+    }
+
+    // returns promise that gets c value or null
+    function pointrel_findLastC(a, b) {
+        return request("/findLastC", {
+            method: "POST",
+            handleAs: "json",
+            data: JSON.stringify({
+                a: a,
+                b: b
+            })
+        }).then(function(response) {
+            if (!response.content) return null;
+            return response.content.c;
+        })
     }
     
     function IBISDiagram(contentPane) {
@@ -559,6 +587,7 @@ require([
         console.log("load clicked");
         var documentID = idTextBox.get("value");
         if (!documentID) return alert("no document ID");
+        /*
         pointrel20141201Client.loadLatestEnvelopeForID(documentID, function(error, envelope) {
             if (error) {
                 console.log("No stored versions could be loaded -- have any versions been saved?");
@@ -578,6 +607,33 @@ require([
             currentDocumentID = documentID;
             hash(currentDocumentID);
         });
+        */
+        pointrel_findLastC(documentID, "content").then(function (c) {
+            if (c === null) {
+                console.log("No stored versions could be loaded -- have any versions been saved?");
+                toast("Load failed for:<br>" + documentID);
+                ibisDiagram.clearDiagram();
+                currentDocumentID = documentID;
+                hash(currentDocumentID);
+                return;
+            }
+            var envelope;
+            try {
+                envelope = JSON.parse(c);
+            } catch (e) {
+                console.log("Problem parsing JSON content", c);
+                return;
+            }
+            console.log("envelope.content", envelope.content);
+            if (envelope.contentType !== "text/IBISDiagram") {
+                console.log("Unexpected content type", envelope.contentType);
+            } else {
+                ibisDiagram.loadDiagram(envelope.content);
+            }
+            toast("Loaded: " + documentID);
+            currentDocumentID = documentID;
+            hash(currentDocumentID);         
+        });
     }
     
     function saveClicked() {
@@ -585,8 +641,9 @@ require([
         var documentID = idTextBox.get("value");
         if (!documentID) return alert("no document ID");
         var contentType = "text/IBISDiagram";
-        var text = ibisDiagram.diagram; // JSON.stringify(ibisDiagram.diagram, null, 2);
-        var metadata = {id: documentID, contentType: contentType, committer: "tester", timestamp: true};        
+        var metadata = {id: documentID, contentType: contentType, committer: "tester", timestamp: true};
+        /* 
+        var text = ibisDiagram.diagram; // JSON.stringify(ibisDiagram.diagram, null, 2);       
         pointrel20141201Client.storeInNewEnvelope(text, metadata, function(error, serverResponse) {
             if (error) {
                 console.log("could not write new version:\n" + error);
@@ -597,7 +654,20 @@ require([
             console.log("wrote sha256HashAndLength:", sha256HashAndLength);
             toast("Saved: " + documentID);
             currentDocumentID = documentID;
-            hash(currentDocumentID);hash(currentDocumentID);
+            hash(currentDocumentID);
+        });
+        */
+        metadata.content = ibisDiagram.diagram;
+        var content = JSON.stringify(metadata, null, 2);
+        pointrel_add(documentID, "content", content).then(function (response) {
+            if (!response.success) {
+                console.log("could not write new version:\n" + response);
+                toast("Save failed for:<br>" + documentID + "<br>" + response.reason);
+                return;
+            }
+            toast("Saved: " + documentID);
+            currentDocumentID = documentID;
+            hash(currentDocumentID);        
         });
     }
     
