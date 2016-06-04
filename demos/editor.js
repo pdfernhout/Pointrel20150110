@@ -18,17 +18,17 @@ function view() {
             m("label", "b: "),
             m("input", { value: data.b, onchange: m.withAttr("value", function (value) { data.b = value; })})
         ]),
+        m("button", { onclick: findLastCClicked }, "Find last C"),
         m("div", [
-            m("label", "c: "),
+            m("label", { class: ".cLabel" }, "c: "),
             m("textarea", { value: data.c, onchange: m.withAttr("value", function (value) { data.c = value; })})
         ]),
-        m("button", { onclick: addClicked }, "Add"),
-        m("div", ["data is ", JSON.stringify(data) ]),
-        m("button", { onclick: findLastCClicked }, "Find last C"),
-        m("#resultDiv", [
-            "Message from server: ",
-            m("pre#serverMessage", serverMessage)
-        ])
+        m("button", { onclick: addClicked }, "Add")
+        // m("div", ["data is ", JSON.stringify(data) ]),
+        //m("#resultDiv", [
+        //    "Message from server: ",
+        //    m("pre#serverMessage", serverMessage)
+        //])
     ]);
 }
 
@@ -65,6 +65,7 @@ function addClicked() {
     console.log("addClicked")
     pointrel_add(data.a, data.b, data.c).then(function(response) {
         serverMessage = JSON.stringify(response, null, 2);
+        console.log("serverMessage", serverMessage);
     });
 }
 
