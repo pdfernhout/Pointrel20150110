@@ -32,6 +32,37 @@ function view() {
     ]);
 }
 
+/* TODO -- call this below
+// returns promise that gets response
+function pointrel_add(a, b, c) {
+    return m.request({
+        url: "/add",
+        method: "POST",
+        data: {
+            a: a,
+            b: b,
+            c: c
+        }
+    });
+}
+
+// returns promise that gets c value or null
+function pointrel_findLastC(a, b) {
+    return m.request({
+        url: "/findLastC",
+        method: "POST",
+        data: {
+            a: a,
+            b: b
+        },
+        unwrapSuccess: function(response) {
+            if (!response.content) return null;
+            return response.content.c;
+        }
+    })
+}
+*/
+    
 function addClicked() {
     console.log("addClicked")
     m.request({
